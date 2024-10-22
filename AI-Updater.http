@@ -1,0 +1,11 @@
+@AI_Updater_HostAddress = http://localhost:5043
+
+GET {{AI_Updater_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{AI_Updater_HostAddress}}/todos/1
+Accept: application/json
+
+###
