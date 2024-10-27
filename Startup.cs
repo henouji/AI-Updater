@@ -1,4 +1,5 @@
-﻿using AI_Updater.Repositories;
+﻿using AI_Updater.Enums;
+using AI_Updater.Repositories;
 using AI_Updater.Repositories.Contracts;
 using AI_Updater.Services;
 using AI_Updater.Services.Contracts;
@@ -20,6 +21,11 @@ namespace AI_Updater
             services.AddMvc();
             services.AddControllers();
 
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole();
+            });
+
             services.AddOpenApiDocument();
             services.AddSwaggerGen(c =>
             {
@@ -32,14 +38,19 @@ namespace AI_Updater
 
             services.AddDbContext<AIContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("SQL_SERVER"));
+                options.UseSqlServer(Configuration.GetConnectionString(Constants.SqlServerConnectionString));
             });
+
+            //Confgure 
+            services.Configure<BlobOptions>(Configuration.GetSection(Constants.BlobConfiguration));
 
             //Repositories
             services.AddTransient<IUserRepository, UserRepository>();
 
             //Services
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IBlobRepository, BlobRepository>();
+        
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
